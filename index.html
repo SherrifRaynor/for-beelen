@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;800&family=Great+Vibes&family=Montserrat:ital,wght@0,300;0,400;0,600;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:ital,wght@0,300;0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap"
         rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -21,9 +21,8 @@
             --glass-bg: rgba(0, 30, 43, 0.7);
             --glass-border: rgba(0, 255, 255, 0.3);
             --atlantis-gold: #b8860b;
-            /* Warna emas tua/perunggu */
             --atlantis-dark: #004d4d;
-            /* Warna logam teroksidasi */
+            --pink-accent: #ff69b4;
         }
 
         * {
@@ -101,69 +100,128 @@
             transition: opacity 1.5s ease;
         }
 
-        /* --- HALAMAN INTRO (TOMBOL ATLANTIS) --- */
-        .intro-container {
+        /* --- INTRO DENGAN ORBIT LOVE --- */
+        .intro-wrapper {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-align: center;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            transition: all 0.8s ease;
+            width: 350px;
+            height: 350px;
             z-index: 20;
+            transition: all 0.8s ease;
         }
 
-        .intro-container.fade-out {
+        .intro-wrapper.fade-out {
             opacity: 0;
             pointer-events: none;
             transform: translate(-50%, -150%);
         }
 
-        /* TOMBOL AWAL DENGAN GAYA ATLANTIS */
+        .intro-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hearts-orbit-container {
+            position: absolute;
+            inset: 0;
+            animation: orbitSpinRight 25s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .heart-orb {
+            position: absolute;
+            font-size: 1.8rem;
+            color: var(--aqua-primary);
+            text-shadow: 0 0 15px var(--aqua-primary), 0 0 25px var(--aqua-secondary);
+            animation: orbitSpinLeft 25s linear infinite;
+        }
+
+        .heart-orb:nth-child(1) {
+            top: 0;
+            left: 50%;
+            margin-left: -0.9rem;
+        }
+
+        .heart-orb:nth-child(2) {
+            top: 25%;
+            right: 7%;
+        }
+
+        .heart-orb:nth-child(3) {
+            bottom: 25%;
+            right: 7%;
+        }
+
+        .heart-orb:nth-child(4) {
+            bottom: 0;
+            left: 50%;
+            margin-left: -0.9rem;
+        }
+
+        .heart-orb:nth-child(5) {
+            bottom: 25%;
+            left: 7%;
+        }
+
+        .heart-orb:nth-child(6) {
+            top: 25%;
+            left: 7%;
+        }
+
+        @keyframes orbitSpinRight {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes orbitSpinLeft {
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+
+        /* --- TOMBOL GAMBAR --- */
         .pearl-btn {
-            width: 110px;
-            height: 110px;
-            /* Sedikit lebih besar untuk frame */
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2.5rem;
             cursor: pointer;
             position: relative;
-
-            /* Inti Glowing (Mutiara) */
-            background: radial-gradient(circle at 40% 40%, #ffffff 0%, #7fffd4 40%, #008b8b 100%);
-
-            /* Frame Atlantis menggunakan Layered Box-Shadows */
-            box-shadow:
-                /* Glow dalam */
-                inset 0 0 20px rgba(0, 255, 255, 0.8),
-                /* Ring gelap dalam (logam tua) */
-                inset 0 0 0 5px var(--atlantis-dark),
-                /* Frame Emas/Perunggu Utama */
-                0 0 0 8px var(--atlantis-gold),
-                /* Glow luar aqua */
-                0 0 30px 10px rgba(0, 255, 255, 0.5),
-                /* Shadow depth */
-                0 15px 30px rgba(0, 0, 0, 0.6);
-
+            background: #000;
+            box-shadow: 0 0 0 4px var(--atlantis-gold), 0 0 30px 5px rgba(255, 105, 180, 0.4), 0 15px 30px rgba(0, 0, 0, 0.6);
             animation: float 3s infinite;
+            padding: 4px;
         }
 
-        /* Ornamen Cincin Luar Berputar (Runes Ring) */
         .pearl-btn::before {
             content: '';
             position: absolute;
-            inset: -14px;
-            /* Sedikit di luar frame utama */
+            inset: -15px;
             border-radius: 50%;
-            border: 2px dashed rgba(184, 134, 11, 0.6);
-            /* Garis putus-putus emas */
+            border: 2px dashed var(--pink-accent);
             animation: spinSlow 12s linear infinite;
-            /* Berputar pelan */
+            opacity: 0.8;
+            box-shadow: 0 0 10px var(--pink-accent);
+        }
+
+        .btn-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         @keyframes spinSlow {
@@ -184,7 +242,7 @@
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
         }
 
-        /* --- STRUKTUR CARD GANTUNG --- */
+        /* --- MAIN STACK --- */
         .hanging-stack {
             display: none;
             flex-direction: column;
@@ -198,7 +256,6 @@
             display: flex;
         }
 
-        /* Common Card Styles */
         .glass-card {
             width: 100%;
             background: var(--glass-bg);
@@ -212,7 +269,6 @@
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
         }
 
-        /* CARD 1 */
         .top-card {
             padding: 30px 20px;
             opacity: 0;
@@ -236,7 +292,6 @@
             line-height: 1.6;
         }
 
-        /* TALI */
         .connector-ropes {
             width: 60%;
             height: 40px;
@@ -254,7 +309,6 @@
             background: linear-gradient(to bottom, var(--aqua-secondary), rgba(255, 255, 255, 0.3));
         }
 
-        /* CARD 2 (FOTO) */
         .photo-card {
             opacity: 0;
             transform: translateY(-20px) rotate(2deg);
@@ -291,14 +345,15 @@
             line-height: 1.5;
         }
 
-        /* TIMELINE */
+        /* --- TIMELINE (CLEAN MINIMALIST - NO MARKER/LINES) --- */
         .timeline-container {
-            width: 95%;
+            width: 100%;
             max-width: 450px;
             margin-top: 50px;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 40px;
+            /* Jarak antar baris lebih lega */
             opacity: 0;
             animation: fadeIn 1s 2.5s forwards;
         }
@@ -306,8 +361,9 @@
         .month-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             width: 100%;
+            position: relative;
         }
 
         .month-row:nth-child(even) {
@@ -325,8 +381,14 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            /* Soft shadow */
             flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .month-box:active {
+            transform: scale(0.98);
         }
 
         .month-gif {
@@ -336,23 +398,27 @@
             display: block;
         }
 
+        /* TEKS BULAN (CLEAN) */
         .month-text {
             flex: 1;
-            margin: 0 15px;
-            font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            color: white;
+            margin: 0 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #ffffff;
             text-align: left;
-            word-wrap: break-word;
+            /* Subtle shadow untuk legibility tanpa outline kasar */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            opacity: 0.95;
         }
 
         .month-row:nth-child(even) .month-text {
             text-align: right;
         }
 
-        /* --- CARD TERAKHIR & TOMBOL PECAH KACA --- */
+        /* --- FINAL SECTION --- */
         .final-section {
-            margin-top: 60px;
+            margin-top: 80px;
             width: 100%;
             max-width: 450px;
             display: flex;
@@ -374,7 +440,6 @@
             letter-spacing: 2px;
         }
 
-        /* TOMBOL YANG SANGAT NOTICEABLE */
         .glass-break-btn {
             position: relative;
             padding: 22px 50px;
@@ -432,7 +497,6 @@
             gap: 5px;
         }
 
-        /* --- OVERLAY 2026 --- */
         #finalOverlay {
             position: fixed;
             inset: 0;
@@ -482,7 +546,6 @@
             opacity: 1;
         }
 
-        /* ANIMASI UMUM */
         @keyframes float {
 
             0%,
@@ -558,9 +621,22 @@
     <div id="bubbles-container"></div>
 
     <div class="content-wrapper" id="contentWrapper">
-        <div class="intro-container" id="page1">
-            <h2 class="intro-title">A Message For You</h2>
-            <div class="pearl-btn" onclick="openGift()">🐝</div>
+
+        <div class="intro-wrapper" id="introWrapper">
+            <div class="hearts-orbit-container">
+                <div class="heart-orb">❤</div>
+                <div class="heart-orb">❤</div>
+                <div class="heart-orb">❤</div>
+                <div class="heart-orb">❤</div>
+                <div class="heart-orb">❤</div>
+                <div class="heart-orb">❤</div>
+            </div>
+            <div class="intro-content">
+                <h2 class="intro-title">A Message For You</h2>
+                <div class="pearl-btn" onclick="openGift()">
+                    <img src="./assets/beebee.jpg" class="btn-img" alt="Open">
+                </div>
+            </div>
         </div>
 
         <div class="hanging-stack" id="mainStack">
@@ -582,10 +658,12 @@
                     <div class="actual-photo"></div>
                 </div>
                 <p class="optimistic-text">
-                    "Let's leave the past on the shore and navigate our future together 🚣🏼‍♀️. Here’s to turning every new
+                    "Let's leave the past on the shore and navigate our future together 🚣🏼‍♀️. Here’s to turning every
+                    new
                     tide into our greatest adventure🏝️."
                 </p>
             </div>
+
             <div class="timeline-container" id="monthGrid"></div>
 
             <div class="final-section">
@@ -605,7 +683,6 @@
                     BREAK INTO 2026
                 </button>
             </div>
-
         </div>
     </div>
 
@@ -613,11 +690,14 @@
         <div class="final-year">2026</div>
         <div class="final-subtext">OUR JOURNEY CONTINUES</div>
         <div class="final-subtext">PLUS ULTRA!</div>
-        
     </div>
 
     <audio id="bgMusic" loop>
         <source src="./assets/So_playful.mp3" type="audio/ogg">
+    </audio>
+
+    <audio id="voiceNote">
+        <source src="./assets/my_voice.mp3" type="audio/mpeg">
     </audio>
 
     <audio id="breakSound">
@@ -640,59 +720,79 @@
             const row = document.createElement('div');
             row.className = 'month-row';
             const displayName = month.charAt(0).toUpperCase() + month.slice(1);
+
             const gifContent = `
                 <div class="month-box">
                     <img src="./assets/${month.toLowerCase()}.gif" alt="${month}" class="month-gif">
                 </div>
             `;
+
+            // CLEAN LAYOUT: Tanpa Marker, Tanpa Line, Tanpa Outline Tebal
             const textContent = `<div class="month-text">${displayName}</div>`;
             row.innerHTML = gifContent + textContent;
             gridContainer.appendChild(row);
         });
 
         function openGift() {
-            const audio = document.getElementById('bgMusic');
-            audio.volume = 0.5; audio.play().catch(e => console.log("Interaction needed"));
+            const music = document.getElementById('bgMusic');
+            const voice = document.getElementById('voiceNote');
+
+            music.volume = 0.15;
+            voice.volume = 1.0;
+
+            music.play().catch(e => console.log("Music auto-play blocked"));
+            voice.play().catch(e => console.log("Voice auto-play blocked"));
+
             document.getElementById('bgLayer').style.transform = "scale(1.2)";
-            document.getElementById('page1').classList.add('fade-out');
+
+            // UPDATE: Fade out wrapper intro
+            document.getElementById('introWrapper').classList.add('fade-out');
+
             document.getElementById('contentWrapper').classList.add('active-layout');
             document.body.style.overflowY = 'auto';
+
             setTimeout(() => {
                 document.getElementById('mainStack').classList.add('show');
                 triggerSoftConfetti();
                 startBubbles();
             }, 500);
+
+            setTimeout(() => {
+                let fadeAudio = setInterval(() => {
+                    if (music.volume < 0.4) {
+                        music.volume = Math.min(0.4, music.volume + 0.01);
+                    } else {
+                        clearInterval(fadeAudio);
+                    }
+                }, 200);
+            }, 20000);
         }
 
         function breakGlass() {
-            // 1. Siapkan Audio
-            const breakSfx = document.getElementById('breakSound'); // Plus Ultra
-            const finalMusic = document.getElementById('finalThemeMusic'); // Might+U
-            const bgMusic = document.getElementById('bgMusic'); // So Playful
+            const breakSfx = document.getElementById('breakSound');
+            const finalMusic = document.getElementById('finalThemeMusic');
+            const bgMusic = document.getElementById('bgMusic');
+            const voice = document.getElementById('voiceNote');
 
-            // 2. Mainkan Plus Ultra dengan volume penuh
             breakSfx.volume = 1.0;
             breakSfx.play().catch(e => console.log("Audio error"));
 
-            // 3. Matikan lagu background secara perlahan
             let fadeOut = setInterval(() => {
-                if (bgMusic.volume > 0.1) {
-                    bgMusic.volume -= 0.1;
+                if (bgMusic.volume > 0.05) {
+                    bgMusic.volume -= 0.05;
+                    if (voice.volume > 0.05) voice.volume -= 0.05;
                 } else {
                     bgMusic.pause();
+                    voice.pause();
                     clearInterval(fadeOut);
                 }
             }, 100);
 
-            // --- AUDIO CHAINING LOGIC ---
-            // Ketika "Plus Ultra" selesai, mainkan "Might+U"
             breakSfx.onended = function () {
-                finalMusic.volume = 0.8; // Atur volume Might+U
+                finalMusic.volume = 0.8;
                 finalMusic.play().catch(e => console.log("Final music autoplay blocked"));
             };
-            // ---------------------------
 
-            // Visual Effects
             document.getElementById('contentWrapper').classList.add('fade-out-final');
 
             const duration = 2000;
