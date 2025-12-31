@@ -1,262 +1,364 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Sayang</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Untuk Sayang ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
-        /* iOS 17 FONT & RESET */
         :root {
-            --ios-glass: rgba(255, 255, 255, 0.15);
-            --ios-glass-border: rgba(255, 255, 255, 0.2);
-            --blur: 25px;
+            --gold: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.5);
+            --dark-bg: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: #000;
+            background-color: #000;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
+            font-family: 'Inter', sans-serif;
             overflow: hidden;
+            color: white;
         }
 
-        /* PHONE FRAME CONTAINER */
-        .phone-frame {
+        /* --- FRAME LOGIC (UX EXPERT TOUCH) --- */
+        /* Jika di desktop, tampilkan frame HP. Jika di HP, full screen. */
+        .viewport-wrapper {
             width: 100%;
             height: 100%;
-            max-width: 430px;
-            /* iPhone 14/15 Pro Max width */
-            max-height: 932px;
             position: relative;
-            background-color: black;
+            background: #000;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 105, 148, 0.3);
         }
 
-        /* BACKGROUND IMAGE (Aquarium) */
-        /* REPLACE 'https://images.unsplash.com/...' WITH YOUR IMAGE FILENAME LIKE 'aquarium.jpg' */
-        .wallpaper {
+        @media (min-width: 768px) {
+            .viewport-wrapper {
+                width: 400px;
+                height: 850px;
+                border-radius: 40px;
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
+                border: 8px solid #1a1a1a;
+            }
+        }
+
+        /* BACKGROUND */
+        .bg-image {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=2727&auto=format&fit=crop') no-repeat center center/cover;
-            z-index: 1;
-            /* Slight dark overlay to make text pop */
-            filter: brightness(0.85);
+            /* Gambar Fireworks/Romantic Night yang High Quality */
+            background: url('https://images.unsplash.com/photo-1467810563316-b5476525c0f9?q=80&w=2669&auto=format&fit=crop') center/cover no-repeat;
+            filter: brightness(0.6);
+            z-index: 0;
+            transition: filter 1s ease;
         }
 
-        /* CONTENT LAYER */
-        .screen-content {
-            position: relative;
-            z-index: 10;
-            height: 100%;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 60px;
-            /* Space for dynamic island */
-        }
-
-        /* DYNAMIC ISLAND (Visual Only) */
-        .dynamic-island {
+        /* OVERLAY GRADIENT */
+        .overlay {
             position: absolute;
-            top: 11px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 35px;
-            background: black;
-            border-radius: 20px;
-            z-index: 20;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: 1;
         }
 
-        /* CLOCK WIDGET */
-        .header-section {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .date {
-            font-size: 1.1rem;
-            font-weight: 500;
-            opacity: 0.9;
-        }
-
-        .time {
-            font-size: 5.5rem;
-            font-weight: 600;
-            letter-spacing: -2px;
-            margin-top: -10px;
-            background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.2));
-        }
-
-        /* NOTIFICATION CARDS (The Love Letter) */
-        .notification-stack {
-            width: 90%;
+        /* --- CONTENT PAGES --- */
+        .page {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        .ios-card {
-            background: rgba(240, 240, 240, 0.18);
-            /* Glass effect */
-            backdrop-filter: blur(var(--blur));
-            -webkit-backdrop-filter: blur(var(--blur));
-            border-radius: 22px;
-            padding: 18px;
-            border: 1px solid var(--ios-glass-border);
-            animation: slideUp 0.8s ease-out;
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
         }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            font-weight: 600;
+        /* PAGE 1: OPENING (SURPRISE) */
+        .intro-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            opacity: 0.8;
         }
 
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: #fff;
-        }
-
-        .card-body {
-            font-size: 1rem;
-            line-height: 1.4;
-            color: rgba(255, 255, 255, 0.95);
-        }
-
-        /* FOOTER ACTIONS */
-        .bottom-actions {
-            margin-top: auto;
-            margin-bottom: 40px;
-            display: flex;
-            gap: 40px;
-        }
-
-        .round-btn {
-            width: 50px;
-            height: 50px;
-            background: rgba(0, 0, 0, 0.4);
+        .open-btn {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
             display: flex;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(10px);
-            font-size: 1.2rem;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 0 30px var(--gold-glow);
+            animation: pulse 2s infinite;
+            transition: transform 0.2s;
         }
 
-        .home-bar {
-            position: absolute;
-            bottom: 8px;
-            width: 140px;
-            height: 5px;
-            background: white;
-            border-radius: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+        .open-btn:active {
+            transform: scale(0.9);
         }
 
-        /* ANIMATION */
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
+        /* PAGE 2: MAIN MESSAGE */
+        .message-container {
+            width: 85%;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 30px;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUpFade 1s 0.5s forwards;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .decorative-line {
+            width: 50px;
+            height: 2px;
+            background: var(--gold);
+            margin: 0 auto 20px auto;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--gold-glow);
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .year {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            letter-spacing: 5px;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* ANIMATIONS */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
             }
 
+            70% {
+                box-shadow: 0 0 0 20px rgba(255, 215, 0, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+            }
+        }
+
+        @keyframes slideUpFade {
             to {
                 transform: translateY(0);
                 opacity: 1;
             }
+        }
+
+        /* Floating Particles (CSS Only for performance) */
+        .firefly {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold);
+            animation: fly 10s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes fly {
+            0% {
+                transform: translateY(110vh) translateX(-20px);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-10vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+
+        /* Audio Control (Hidden but accessible if needed) */
+        .music-control {
+            position: absolute;
+            bottom: 30px;
+            opacity: 0.5;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="phone-frame">
-        <div class="dynamic-island"></div>
-        <div class="wallpaper"></div>
+    <div class="viewport-wrapper">
+        <div class="bg-image"></div>
+        <div class="overlay"></div>
 
-        <div class="screen-content">
-            <div class="header-section">
-                <div class="date" id="currentDate">Monday, 1 January</div>
-                <div class="time" id="currentTime">12:00</div>
+        <div class="page" id="page1">
+            <div class="intro-text">Ada pesan untukmu</div>
+            <div class="open-btn" onclick="openMessage()">
+                ✉️
             </div>
-
-            <div class="notification-stack">
-
-                <div class="ios-card" style="animation-delay: 0.1s;">
-                    <div class="card-header">
-                        <span>iMessage • Now</span>
-                    </div>
-                    <div class="card-title">Sayang's Boyfriend ❤️</div>
-                    <div class="card-body">
-                        I am so incredibly grateful for you this year. I hope to be with you for the rest of my life.
-                    </div>
-                </div>
-
-                <div class="ios-card" style="animation-delay: 0.3s;">
-                    <div class="card-header">
-                        <span>Reminders • Just now</span>
-                    </div>
-                    <div class="card-title">My wish for us</div>
-                    <div class="card-body">
-                        Thanks for the comfort and love you gave me.
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="bottom-actions">
-                <div class="round-btn">🔦</div>
-                <div class="round-btn">📷</div>
-            </div>
-
-            <div class="home-bar"></div>
+            <div class="music-control">Tap amplop untuk membuka</div>
         </div>
+
+        <div class="page hidden" id="page2">
+            <div id="fireflies-container"></div>
+
+            <div class="message-container">
+                <div class="decorative-line"></div>
+                <h1>Happy New Year</h1>
+
+                <p>
+                    Terima kasih sudah menjadi bagian terbaik di tahun 2024 ku.<br><br>
+                    Aku sangat bersyukur memilikimu. Semoga di tahun yang baru ini, kita bisa terus tumbuh bersama,
+                    tertawa bersama, dan saling mencintai lebih dalam lagi.<br><br>
+                    <span class="highlight">I Love You, Sayang ❤️</span>
+                </p>
+
+                <div class="year">2025</div>
+                <div class="decorative-line" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+
+        <audio id="bgMusic" loop>
+            <source src="./audio/So_playful.mp3" type="audio/ogg">
+            Your browser does not support audio.
+        </audio>
     </div>
 
     <script>
-        // Simple script to update date and time to look real
-        function updateTime() {
-            const now = new Date();
+        // 1. Setup Fireflies (Efek kunang-kunang naik)
+        function createFireflies() {
+            const container = document.getElementById('fireflies-container');
+            const particleCount = 20;
 
-            // Time
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
+            for (let i = 0; i < particleCount; i++) {
+                const firefly = document.createElement('div');
+                firefly.className = 'firefly';
 
-            // Date
-            const options = { weekday: 'long', day: 'numeric', month: 'long' };
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+                // Random position & animation
+                const left = Math.random() * 100 + '%';
+                const delay = Math.random() * 5 + 's';
+                const duration = Math.random() * 5 + 10 + 's'; // 10-15s
+
+                firefly.style.left = left;
+                firefly.style.animationDelay = delay;
+                firefly.style.animationDuration = duration;
+
+                container.appendChild(firefly);
+            }
         }
 
-        setInterval(updateTime, 1000);
-        updateTime();
+        // 2. Fungsi Buka Pesan
+        function openMessage() {
+            // Mainkan Musik
+            const audio = document.getElementById("bgMusic");
+            // Catatan: Gunakan link lagu MP3 yang valid jika ingin mengganti lagu
+            audio.volume = 0.4;
+            audio.play().catch(e => console.log("Audio autoplay restriction handled"));
+
+            // Transisi Halaman
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+
+            // Efek Brightness Background
+            document.querySelector('.bg-image').style.filter = "brightness(0.8)";
+
+            // Jalankan Fireflies
+            createFireflies();
+
+            // Jalankan Confetti (Kembang Api Emas)
+            triggerConfetti();
+        }
+
+        // 3. Efek Confetti Mewah
+        function triggerConfetti() {
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                // Kembang api kiri & kanan
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#FFD700', '#FFA500', '#FFFFFF'] // Emas & Putih
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#FFD700', '#FFA500', '#FFFFFF']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
     </script>
 </body>
 
