@@ -20,6 +20,10 @@
             --ocean-deep: #001e2b;
             --glass-bg: rgba(0, 30, 43, 0.7);
             --glass-border: rgba(0, 255, 255, 0.3);
+            --atlantis-gold: #b8860b;
+            /* Warna emas tua/perunggu */
+            --atlantis-dark: #004d4d;
+            /* Warna logam teroksidasi */
         }
 
         * {
@@ -82,7 +86,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding-bottom: 100px;
+            padding-bottom: 150px;
             transition: all 0.5s ease;
         }
 
@@ -91,7 +95,13 @@
             padding-top: 50px;
         }
 
-        /* --- HALAMAN INTRO (TOMBOL) --- */
+        .content-wrapper.fade-out-final {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+        }
+
+        /* --- HALAMAN INTRO (TOMBOL ATLANTIS) --- */
         .intro-container {
             position: absolute;
             top: 50%;
@@ -102,6 +112,7 @@
             flex-direction: column;
             align-items: center;
             transition: all 0.8s ease;
+            z-index: 20;
         }
 
         .intro-container.fade-out {
@@ -110,31 +121,72 @@
             transform: translate(-50%, -150%);
         }
 
+        /* TOMBOL AWAL DENGAN GAYA ATLANTIS */
         .pearl-btn {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
+            /* Sedikit lebih besar untuk frame */
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #ffffff, #a0e0e0, #008b8b);
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 2.5rem;
             cursor: pointer;
+            position: relative;
+
+            /* Inti Glowing (Mutiara) */
+            background: radial-gradient(circle at 40% 40%, #ffffff 0%, #7fffd4 40%, #008b8b 100%);
+
+            /* Frame Atlantis menggunakan Layered Box-Shadows */
+            box-shadow:
+                /* Glow dalam */
+                inset 0 0 20px rgba(0, 255, 255, 0.8),
+                /* Ring gelap dalam (logam tua) */
+                inset 0 0 0 5px var(--atlantis-dark),
+                /* Frame Emas/Perunggu Utama */
+                0 0 0 8px var(--atlantis-gold),
+                /* Glow luar aqua */
+                0 0 30px 10px rgba(0, 255, 255, 0.5),
+                /* Shadow depth */
+                0 15px 30px rgba(0, 0, 0, 0.6);
+
             animation: float 3s infinite;
+        }
+
+        /* Ornamen Cincin Luar Berputar (Runes Ring) */
+        .pearl-btn::before {
+            content: '';
+            position: absolute;
+            inset: -14px;
+            /* Sedikit di luar frame utama */
+            border-radius: 50%;
+            border: 2px dashed rgba(184, 134, 11, 0.6);
+            /* Garis putus-putus emas */
+            animation: spinSlow 12s linear infinite;
+            /* Berputar pelan */
+        }
+
+        @keyframes spinSlow {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .intro-title {
             font-family: 'Cinzel', serif;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             color: var(--aqua-primary);
             letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
         }
 
-        /* --- STRUKTUR CARD GANTUNG (HANGING STACK) --- */
+        /* --- STRUKTUR CARD GANTUNG --- */
         .hanging-stack {
             display: none;
-            /* Awalnya hidden */
             flex-direction: column;
             align-items: center;
             width: 90%;
@@ -146,19 +198,23 @@
             display: flex;
         }
 
-        /* 1. CARD PERTAMA (PESAN / HAPPY NEW YEAR) */
-        .top-card {
+        /* Common Card Styles */
+        .glass-card {
             width: 100%;
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
             border-radius: 15px;
-            padding: 30px 20px;
+            padding: 20px;
             text-align: center;
             position: relative;
             z-index: 5;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            /* Animasi Masuk */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        /* CARD 1 */
+        .top-card {
+            padding: 30px 20px;
             opacity: 0;
             transform: translateY(-50px);
             animation: fadeDown 1s forwards;
@@ -171,20 +227,19 @@
             background: linear-gradient(to bottom, #fff, #00ffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .top-card p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #e0f7fa;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        /* TALI PENGHUBUNG */
+        /* TALI */
         .connector-ropes {
             width: 60%;
             height: 40px;
-            /* Jarak antar card */
             display: flex;
             justify-content: space-between;
             position: relative;
@@ -199,18 +254,8 @@
             background: linear-gradient(to bottom, var(--aqua-secondary), rgba(255, 255, 255, 0.3));
         }
 
-        /* 2. CARD KEDUA (FOTO) - GIF BOX DIHAPUS */
+        /* CARD 2 (FOTO) */
         .photo-card {
-            width: 100%;
-            position: relative;
-            z-index: 5;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 10px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-            /* Animasi Masuk */
             opacity: 0;
             transform: translateY(-20px) rotate(2deg);
             transform-origin: top center;
@@ -233,29 +278,27 @@
             background-size: cover;
             background-position: center;
             background-image: url('./assets/WhatsApp Image 2025-12-31 at 11.09.26 AM.jpeg');
-            /* FOTO UTAMA */
-            filter: sepia(10%);
+            filter: sepia(10%) brightness(0.9);
         }
 
-        /* PESAN MAAF */
-        .apology-text {
+        .optimistic-text {
             margin-top: 15px;
             padding: 0 10px;
             font-family: 'Montserrat', sans-serif;
             font-style: italic;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
         }
 
-        /* --- TIMELINE BULAN (ZIG-ZAG LAYOUT) --- */
+        /* TIMELINE */
         .timeline-container {
-            width: 90%;
+            width: 95%;
             max-width: 450px;
             margin-top: 50px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
             opacity: 0;
             animation: fadeIn 1s 2.5s forwards;
         }
@@ -267,50 +310,179 @@
             width: 100%;
         }
 
-        /* Zig Zag Logic */
         .month-row:nth-child(even) {
             flex-direction: row-reverse;
         }
 
         .month-box {
-            width: 80px;
-            height: 80px;
+            width: 140px;
+            aspect-ratio: 16 / 9;
             border: 2px solid var(--aqua-secondary);
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(5px);
-            /* PENTING AGAR GIF FIT */
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            padding: 0;
             box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.1);
+            flex-shrink: 0;
         }
 
-        /* Style untuk GIF di dalam kotak */
         .month-gif {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* Agar gambar memenuhi kotak tanpa gepeng */
             display: block;
         }
 
         .month-text {
             flex: 1;
-            margin: 0 20px;
+            margin: 0 15px;
             font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: white;
             text-align: left;
+            word-wrap: break-word;
         }
 
         .month-row:nth-child(even) .month-text {
             text-align: right;
         }
 
-        /* ANIMASI */
+        /* --- CARD TERAKHIR & TOMBOL PECAH KACA --- */
+        .final-section {
+            margin-top: 60px;
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeIn 1s 3.5s forwards;
+        }
+
+        .final-card {
+            padding: 30px 20px;
+        }
+
+        .final-card h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--aqua-primary);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        /* TOMBOL YANG SANGAT NOTICEABLE */
+        .glass-break-btn {
+            position: relative;
+            padding: 22px 50px;
+            background: rgba(0, 255, 255, 0.15);
+            border: 3px solid var(--aqua-primary);
+            border-radius: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: white;
+            letter-spacing: 3px;
+            font-weight: bold;
+            cursor: pointer;
+            overflow: hidden;
+            animation: powerPulse 2s infinite;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 1);
+        }
+
+        @keyframes powerPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.3);
+            }
+
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 0 50px rgba(0, 255, 255, 0.8), inset 0 0 30px rgba(0, 255, 255, 0.6);
+                background: rgba(0, 255, 255, 0.3);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.3);
+            }
+        }
+
+        .glass-break-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.6;
+            background-image: url('https://www.transparentpng.com/thumb/crack/white-crack-clipart-transparent-background-14.png');
+            background-size: cover;
+            background-position: center;
+            filter: invert(1);
+        }
+
+        .click-hint {
+            font-size: 0.9rem;
+            color: var(--aqua-primary);
+            animation: float 2s infinite;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* --- OVERLAY 2026 --- */
+        #finalOverlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: radial-gradient(circle at center, #00334e 0%, #000000 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease-in-out;
+        }
+
+        #finalOverlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .final-year {
+            font-family: 'Great Vibes', cursive;
+            font-size: 8rem;
+            background: linear-gradient(to bottom, #ffffff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px var(--aqua-secondary));
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s;
+        }
+
+        #finalOverlay.active .final-year {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .final-subtext {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--aqua-primary);
+            letter-spacing: 5px;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 1s 1.5s;
+        }
+
+        #finalOverlay.active .final-subtext {
+            opacity: 1;
+        }
+
+        /* ANIMASI UMUM */
         @keyframes float {
 
             0%,
@@ -353,7 +525,6 @@
             }
         }
 
-        /* Bubbles */
         .bubble {
             position: absolute;
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -387,49 +558,77 @@
     <div id="bubbles-container"></div>
 
     <div class="content-wrapper" id="contentWrapper">
-
         <div class="intro-container" id="page1">
             <h2 class="intro-title">A Message For You</h2>
-            <div class="pearl-btn" onclick="openGift()">🌊</div>
+            <div class="pearl-btn" onclick="openGift()">🐝</div>
         </div>
 
         <div class="hanging-stack" id="mainStack">
-
-            <div class="top-card">
-                <h1>HAPPY NEW YEAR</h1>
+            <div class="glass-card top-card">
+                <h1>MY DEEPEST GRATITUDE</h1>
                 <p>
-                    Semoga tahun ini membawa kebahagiaan, tawa, dan cinta yang tak terhingga.<br>
-                    <span style="color:var(--aqua-primary); font-weight:bold;">I Love You! 💙</span>
+                    I am infinitely grateful for your existence in this life with me.
+                    I want to be with you just like the sea, deep, and eternally connected.
+                    All the struggle and fun with you is all i want and i dont want more of that from anyone.<br>
+                    <span style="color:var(--aqua-primary); font-weight:bold;">I Love Youu Beebee🐝! 💙</span>
                 </p>
             </div>
-
             <div class="connector-ropes">
                 <div class="rope"></div>
                 <div class="rope"></div>
             </div>
-
-            <div class="photo-card">
+            <div class="glass-card photo-card">
                 <div class="aspect-ratio-16-9">
                     <div class="actual-photo"></div>
                 </div>
-                <p class="apology-text">
-                    "Im sorry if my promises was not kept. But I will be better, and I hope we both will look at each
-                    other's differences and fill those incompleteness."
+                <p class="optimistic-text">
+                    "Let's leave the past on the shore and navigate our future together 🚣🏼‍♀️. Here’s to turning every new
+                    tide into our greatest adventure🏝️."
                 </p>
             </div>
+            <div class="timeline-container" id="monthGrid"></div>
 
-            <div class="timeline-container" id="monthGrid">
+            <div class="final-section">
+                <div class="glass-card final-card">
+                    <h2>BEYOND THE HORIZON</h2>
+                    <p class="optimistic-text" style="margin-top:0;">
+                        The future is an open sea waiting for us. Are you ready to break through to our next chapter?
+                    </p>
+                </div>
+
+                <div class="click-hint">
+                    Tap to Break Limits!
+                    <span>👇</span>
+                </div>
+
+                <button class="glass-break-btn" onclick="breakGlass()">
+                    BREAK INTO 2026
+                </button>
             </div>
 
         </div>
+    </div>
+
+    <div id="finalOverlay">
+        <div class="final-year">2026</div>
+        <div class="final-subtext">OUR JOURNEY CONTINUES</div>
+        <div class="final-subtext">PLUS ULTRA!</div>
+        
     </div>
 
     <audio id="bgMusic" loop>
         <source src="./assets/So_playful.mp3" type="audio/ogg">
     </audio>
 
+    <audio id="breakSound">
+        <source src="./assets/plus_ultra.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="finalThemeMusic">
+        <source src="./assets/might+u.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        // DAFTAR BULAN
         const months = [
             "january", "february", "march", "april", "may", "june",
             "july", "august", "september", "october", "november", "december"
@@ -440,42 +639,79 @@
         months.forEach((month, index) => {
             const row = document.createElement('div');
             row.className = 'month-row';
-
-            // --- BAGIAN INI YANG DIUBAH ---
-            // Menggunakan ${month} agar nama file sesuai nama bulan
-            // Pastikan nama file kamu: January.gif, February.gif, dst (Huruf besar depan)
+            const displayName = month.charAt(0).toUpperCase() + month.slice(1);
             const gifContent = `
                 <div class="month-box">
-                    <img src="./assets/${month}.gif" alt="${month}" class="month-gif">
+                    <img src="./assets/${month.toLowerCase()}.gif" alt="${month}" class="month-gif">
                 </div>
             `;
-
-            const textContent = `<div class="month-text">${month}</div>`;
-
-            // Gabungkan
+            const textContent = `<div class="month-text">${displayName}</div>`;
             row.innerHTML = gifContent + textContent;
-
             gridContainer.appendChild(row);
         });
 
         function openGift() {
             const audio = document.getElementById('bgMusic');
             audio.volume = 0.5; audio.play().catch(e => console.log("Interaction needed"));
-
             document.getElementById('bgLayer').style.transform = "scale(1.2)";
             document.getElementById('page1').classList.add('fade-out');
-
             document.getElementById('contentWrapper').classList.add('active-layout');
             document.body.style.overflowY = 'auto';
-
             setTimeout(() => {
                 document.getElementById('mainStack').classList.add('show');
-                triggerConfetti();
+                triggerSoftConfetti();
                 startBubbles();
             }, 500);
         }
 
-        // BUBBLES
+        function breakGlass() {
+            // 1. Siapkan Audio
+            const breakSfx = document.getElementById('breakSound'); // Plus Ultra
+            const finalMusic = document.getElementById('finalThemeMusic'); // Might+U
+            const bgMusic = document.getElementById('bgMusic'); // So Playful
+
+            // 2. Mainkan Plus Ultra dengan volume penuh
+            breakSfx.volume = 1.0;
+            breakSfx.play().catch(e => console.log("Audio error"));
+
+            // 3. Matikan lagu background secara perlahan
+            let fadeOut = setInterval(() => {
+                if (bgMusic.volume > 0.1) {
+                    bgMusic.volume -= 0.1;
+                } else {
+                    bgMusic.pause();
+                    clearInterval(fadeOut);
+                }
+            }, 100);
+
+            // --- AUDIO CHAINING LOGIC ---
+            // Ketika "Plus Ultra" selesai, mainkan "Might+U"
+            breakSfx.onended = function () {
+                finalMusic.volume = 0.8; // Atur volume Might+U
+                finalMusic.play().catch(e => console.log("Final music autoplay blocked"));
+            };
+            // ---------------------------
+
+            // Visual Effects
+            document.getElementById('contentWrapper').classList.add('fade-out-final');
+
+            const duration = 2000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({
+                    particleCount: 50, angle: 90, spread: 360, origin: { x: 0.5, y: 0.8 },
+                    colors: ['#ffffff', '#a0e0e0', '#00ffff'], shapes: ['square'],
+                    startVelocity: 50, gravity: 1.5, scalar: 0.8, drift: 0, ticks: 200
+                });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+
+            setTimeout(() => {
+                document.getElementById('finalOverlay').classList.add('active');
+                setTimeout(triggerSoftConfetti, 1000);
+            }, 1500);
+        }
+
         function startBubbles() {
             setInterval(() => {
                 const b = document.createElement('div');
@@ -489,13 +725,16 @@
             }, 300);
         }
 
-        // CONFETTI
-        function triggerConfetti() {
-            const end = Date.now() + 2000;
+        function triggerSoftConfetti() {
+            const duration = 3000;
+            const end = Date.now() + duration;
             (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#00ffff', '#ffffff'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#00ffff', '#ffffff'] });
-                if (Date.now() < end) requestAnimationFrame(frame);
+                confetti({
+                    particleCount: 3, angle: 90, spread: 100, origin: { x: 0.5, y: 0.6 },
+                    colors: ['#00ffff', '#ffffff', '#00bfff'],
+                    startVelocity: 40, scalar: 1.1, drift: 0, gravity: 1.1
+                });
+                if (Date.now() < end) { setTimeout(() => { requestAnimationFrame(frame); }, 100); }
             }());
         }
     </script>
